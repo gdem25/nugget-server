@@ -4,6 +4,7 @@ const cors = require("cors");
 const knex = require("knex");
 const { json } = require("body-parser");
 const { response } = require("express");
+const Register = require("./controllers/register");
 const psql = knex({
     client: "pg",
     connection: {
@@ -26,12 +27,7 @@ app.get("/", (req, res) => {
         .catch((err) => res.json(err));
 });
 
-app.post("/", (req, res) => {
-    const { name, email, userid, image, major } = req.body;
-    psql("students").returning("*").insert({ name, email, userid, image, major })
-        .then((resp) => res.json(resp))
-        .catch(err => res.json(err));
-});
+app.post("/register", (req,res) => {Register.handleRegister(req,res,psql)} );
 
 
 app.listen(3001, () => {
