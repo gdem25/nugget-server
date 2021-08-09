@@ -4,7 +4,10 @@ const cors = require("cors");
 const knex = require("knex");
 const { json } = require("body-parser");
 const { response } = require("express");
-const Register = require("./controllers/register");
+const Auth = require("./controllers/auth");
+const RequiredClasses = require("./controllers/requiredClasses")
+const Transcript = require("./controllers/transcript")
+const EnrolledClasses = require("./controllers/enrolledClasses")
 const psql = knex({
     client: "pg",
     connection: {
@@ -27,7 +30,25 @@ app.get("/", (req, res) => {
         .catch((err) => res.json(err));
 });
 
-app.post("/register", (req,res) => {Register.handleRegister(req,res,psql)} );
+app.post("/signin", (req,res) => {Auth.handleSignIn(req,res,psql)} );
+
+
+app.put("/signin",(req,res) => Auth.updateStudentMajor(req,res,psql) );
+
+
+app.post ("/required",(req,res) => RequiredClasses.insertClassesToDB(req,res,psql) );
+
+app.get("/allclasses", (req,res) => RequiredClasses.getAllClasses(req,res,psql) );
+
+app.get("/required",(req,res) => RequiredClasses.getRequiredClasses(req,res,psql) )
+
+app.post("/transcript", (req,res) => Transcript.postToTranscript(req,res,psql)  )
+
+app.get("/transcript", (req,res) =>  Transcript.getStudentTranscript(req,res,psql) )
+
+app.post("/enrolled",(req,res) => EnrolledClasses.postToEnrolled(req,res,psql) )
+
+app.get("/enrolled", (req,res) =>  EnrolledClasses.getEnrolledClasses(req,res,psql) )
 
 
 app.listen(3001, () => {
