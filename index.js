@@ -50,6 +50,8 @@ app.post("/enrolled",(req,res) => EnrolledClasses.postToEnrolled(req,res,psql) )
 
 app.get("/enrolled", (req,res) =>  EnrolledClasses.getEnrolledClasses(req,res,psql) )
 
+app.delete("/enrolled", (req,res) => EnrolledClasses.deleteFromEnrolled(req,res,psql) )
+
 
 app.listen(3001, () => {
     console.log(" listening to port 3001 ");

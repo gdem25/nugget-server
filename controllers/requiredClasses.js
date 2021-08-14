@@ -2,10 +2,10 @@
 
 
 const insertClassesToDB = (req, res, psql) => {
-    const { name, section, sectionid, classid, teacher, rate, major, description, first  } = req.body;
+    const { name, section, sectionid, classid, teacher, rate, major, description, first, prereq  } = req.body;
     psql('requiredclasses')
         .returning('*')
-        .insert({ name, section, sectionid, classid, teacher, rate, major, description, first })
+        .insert({ name, section, sectionid, classid, teacher, rate, major, description, first, prereq })
         .then((classInfo) => { res.json(classInfo[0]) })
         .catch((err) => res.json(err));
 }
