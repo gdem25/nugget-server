@@ -52,6 +52,8 @@ app.get("/enrolled", (req,res) =>  EnrolledClasses.getEnrolledClasses(req,res,ps
 
 app.delete("/enrolled", (req,res) => EnrolledClasses.deleteFromEnrolled(req,res,psql) )
 
+app.put("/enrolled" , (req,res) =>  EnrolledClasses.swapClasses(req,res,psql) )
+
 
 app.listen(3001, () => {
     console.log(" listening to port 3001 ");

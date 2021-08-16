@@ -17,7 +17,7 @@
 
 
 const postToEnrolled = (req,res,psql) => {
-    const { classid, userid, sectionid, prereq } = req.body;
+    const { classid, userid, sectionid, prereq, term } = req.body;
     if( prereq === null ) {
         psql.transaction(trx => {
             trx("enrolled")
@@ -27,12 +27,12 @@ const postToEnrolled = (req,res,psql) => {
                 if(!data[0]) {
                     trx("enrolled")
                      .returning("*")
-                     .insert({ classid, userid, sectionid })
-                     .then(response => res.json(response) )
+                     .insert({ classid, userid, sectionid, term })
+                     .then(response => res.json(response[0]) )
                      .catch(err => res.json(err))
                 }
                 else {
-                    res.json('class taken')
+                    res.json({ error: 'class taken', classid: classid })
                 }
             })
             .then(trx.commit)
@@ -53,12 +53,12 @@ const postToEnrolled = (req,res,psql) => {
                     if(check[0]) {
                         psql("enrolled")
                             .returning("*")
-                            .insert({ classid, userid, sectionid })
-                            .then(info => res.json(info))
+                            .insert({ classid, userid, sectionid, term })
+                            .then(info => res.json(info[0]))
                             .catch(err => res.json(err))
                     }
                     else  {
-                        res.json("Prereq Not Taken")
+                        res.json({ error: "Prereq Not Taken", classid: classid })
                     }
                 }
                 catch(err) {
@@ -66,7 +66,7 @@ const postToEnrolled = (req,res,psql) => {
                 }
             }
             else {
-                res.json("Class Taken")
+                res.json({ error: 'class taken', classid: classid })
             }
         })
         .catch(err => res.json(err))
@@ -76,7 +76,7 @@ const postToEnrolled = (req,res,psql) => {
 
 
 const getEnrolledClasses = (req,res,psql) => {
-    const { userid } = req.body;
+    const { userid } = req.headers;
     psql.select('*')
         .from('enrolled')
         .where({ userid })
@@ -97,8 +97,30 @@ const deleteFromEnrolled = (req,res,psql) => {
 }
 
 
+const swapClasses = (req,res,psql) => {
+    const { classid, userid, sectionid, term } = req.body
+    psql
+        .select("*")
+        .from("enrolled")
+        .where({ userid, sectionid })
+        .update({ classid, term })
+        .returning("*")
+        .then(data => {
+            if(data[0]) {
+                res.json({ classid: data[0].classid })
+            }
+            else {
+                res.json({ error: "Class not Found: Cant Swap This Class", classid: classid })
+            }
+        })
+        
+
+}
+
+
 module.exports = {
     postToEnrolled,
     getEnrolledClasses,
-    deleteFromEnrolled
+    deleteFromEnrolled,
+    swapClasses
 }
