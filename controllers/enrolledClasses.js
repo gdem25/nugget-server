@@ -107,7 +107,7 @@ const swapClasses = (req,res,psql) => {
         .returning("*")
         .then(data => {
             if(data[0]) {
-                res.json({ classid: data[0].classid })
+                res.json({ classid: data[0].classid, sectionid: data[0].sectionid })
             }
             else {
                 res.json({ error: "Class not Found: Cant Swap This Class", classid: classid })

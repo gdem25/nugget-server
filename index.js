@@ -8,6 +8,7 @@ const Auth = require("./controllers/auth");
 const RequiredClasses = require("./controllers/requiredClasses")
 const Transcript = require("./controllers/transcript")
 const EnrolledClasses = require("./controllers/enrolledClasses")
+const ChatRoom = require("./controllers/chatRoom")
 const psql = knex({
     client: "pg",
     connection: {
@@ -54,6 +55,11 @@ app.delete("/enrolled", (req,res) => EnrolledClasses.deleteFromEnrolled(req,res,
 
 app.put("/enrolled" , (req,res) =>  EnrolledClasses.swapClasses(req,res,psql) )
 
+app.get("/chatrooms", (req,res) => ChatRoom.getChatRooms(req,res,psql) )
+
+app.get("/chatcomments", (req,res) => ChatRoom.getComments(req,res,psql))
+
+app.post("/chatcomments", (req,res) => ChatRoom.postComment(req,res,psql))
 
 app.listen(3001, () => {
     console.log(" listening to port 3001 ");
