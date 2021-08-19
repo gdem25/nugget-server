@@ -61,6 +61,8 @@ app.get("/chatcomments", (req,res) => ChatRoom.getComments(req,res,psql))
 
 app.post("/chatcomments", (req,res) => ChatRoom.postComment(req,res,psql))
 
+app.get("/admin", (req,res) => Transcript.getRequiredAdmin(req,res,psql) )
+
 app.listen(3001, () => {
     console.log(" listening to port 3001 ");
 });
