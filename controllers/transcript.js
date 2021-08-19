@@ -2,10 +2,10 @@
 
 
 const postToTranscript = (req,res,psql) => {
-    const { classid, userid, gpa, grade, term, units } = req.body;
+    const { classid, userid, gpa, grade, term, units, sectionid } = req.body;
     psql('transcript')
         .returning('*')
-        .insert({ classid, userid, gpa, grade, term, units })
+        .insert({ classid, userid, gpa, grade, term, units, sectionid })
         .then(data => res.json(data[0]))
         .catch(err => res.json(err))
 }
@@ -16,7 +16,6 @@ const getStudentTranscript = (req,res,psql) => {
         .from('transcript')
         .where({ userid })
         .returning('*')
-        .join('requiredclasses','transcript.classid','requiredclasses.classid')
         .then(data => res.json(data))
         .catch(err => res.json(err))
 }

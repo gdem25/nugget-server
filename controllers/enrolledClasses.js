@@ -47,7 +47,7 @@ const postToEnrolled = (req,res,psql) => {
         .then(async(data) => {
             if(!data[0]) {
                 try {
-                    const check = await psql("enrolled")
+                    const check = await psql("transcript")
                                         .select("*")
                                         .where({ userid: userid, sectionid: prereq })
                     if(check[0]) {
