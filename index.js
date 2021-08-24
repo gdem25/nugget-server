@@ -15,7 +15,7 @@ const psql = knex({
         host: "127.0.0.1",
         user: "postgres",
         password: "test",
-        database: "nuggetportal",
+        database: "thenuggetportal",
     },
 });
 
