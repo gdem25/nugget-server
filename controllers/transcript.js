@@ -10,6 +10,16 @@ const postToTranscript = (req,res,psql) => {
         .catch(err => res.json(err))
 }
 
+const getSemesterTranscript = (req,res,psql) => {
+    const { userid, term } = req.headers
+    psql.select('*')
+        .from('transcript')
+        .where({ userid, term })
+        .returning('*')
+        .then(data => res.json(data) )
+        .catch(err => res.json(err) )
+}
+
 const getStudentTranscript = (req,res,psql) => {
     const { userid } = req.headers;
     psql.select('*')
@@ -34,5 +44,6 @@ const getRequiredAdmin = (req,res,psql) => {
 module.exports = {
     postToTranscript,
     getStudentTranscript,
-    getRequiredAdmin
+    getRequiredAdmin,
+    getSemesterTranscript
 }

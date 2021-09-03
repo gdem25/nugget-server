@@ -45,6 +45,8 @@ app.get("/required",(req,res) => RequiredClasses.getRequiredClasses(req,res,psql
 
 app.post("/transcript", (req,res) => Transcript.postToTranscript(req,res,psql)  )
 
+app.get("/semtranscript", (req,res) => Transcript.getSemesterTranscript(req,res,psql)  )
+
 app.get("/transcript", (req,res) =>  Transcript.getStudentTranscript(req,res,psql) )
 
 app.post("/enrolled",(req,res) => EnrolledClasses.postToEnrolled(req,res,psql) )
